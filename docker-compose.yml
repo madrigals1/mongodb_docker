@@ -1,18 +1,21 @@
 version: "3"
+
 services:
-  mongo:
-    image: mongo
-    container_name: mongo
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
-      - APP_MONGO_HOST=${MONGO_HOST}
-      - MONGO_PORT=${MONGO_PORT}
-      - MONGO_ROOT_USER=${MONGO_ROOT_USERNAME}
-      - MONGO_ROOT_PASS=${MONGO_ROOT_PASSWORD}
-      - APP_MONGO_USER=${APP_MONGO_USER}
-      - APP_MONGO_PASS=${APP_MONGO_PASS}
-      - APP_MONGO_DB=${APP_MONGO_DB}
-    volumes:
-      - ./data:/data/db
-      - ./entrypoint.sh:/docker-entrypoint-initdb.d/entrypoint.sh
+    mongodb:
+        image: mongo:latest
+        container_name: mongodb
+        hostname: mongodb
+        volumes:
+            - ./.docker/mongodb/mongod.conf:/etc/mongod.conf
+            - ./.docker/mongodb/initdb.d/:/docker-entrypoint-initdb.d/
+            - ./.docker/mongodb/data/db/:/data/db/
+            - ./.docker/mongodb/data/log/:/var/log/mongodb/
+        env_file:
+            - .env
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+            MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+        ports:
+            - "27017:27017"
+        command: ["-f", "/etc/mongod.conf"]
