@@ -1,2 +1,2 @@
 .env
-.docker/mongodb/data/db
+/data
