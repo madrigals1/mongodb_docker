@@ -14,5 +14,3 @@ services:
             - MONGO_INITDB_ROOT_USERNAME=${ROOT_USERNAME}
             - MONGO_INITDB_ROOT_PASSWORD=${ROOT_PASSWORD}
         command: ["mongod", "--auth"]
-networks:
-    default:
