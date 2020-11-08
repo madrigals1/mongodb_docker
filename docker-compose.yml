@@ -5,34 +5,51 @@ services:
     image: mongo
     container_name: mongo
     restart: always
-    env_file:
-      - .env
     ports:
       - "${MONGO_PORT}:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     command: ["mongod", "--auth"]
+    networks:
+      - mongo_network
 
   mongo-express:
     image: mongo-express
     container_name: mongo-express
     restart: always
-    env_file:
-      - .env
     ports:
-      - "${MONGO_EXPRESS_PORT}:8081"
+      - "${ME_PORT}:8081"
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${ROOT_USERNAME}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${ROOT_PASSWORD}
+      # Connection of User to Mongo Express
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
+
+      # Connection of Mongo Express to Mongo DB
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: ${MONGO_PORT}
+
+      # Admin access settings
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_AUTH_DATABASE: admin
+      ME_CONFIG_MONGODB_AUTH_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_AUTH_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      
+      # Let's encrypt settings
       VIRTUAL_HOST: ${MONGO_EXPRESS_SSL_DOMAIN}
-      VIRTUAL_PORT: ${MONGO_EXPRESS_PORT}
+      VIRTUAL_PORT: ${ME_PORT}
       LETSENCRYPT_HOST: ${MONGO_EXPRESS_SSL_DOMAIN}
       LETSENCRYPT_EMAIL: ${MONGO_EXPRESS_LETSENCRYPT_EMAIL}
+    depends_on:
+      - mongo
     networks:
+      - mongo_network
       - proxy
 
 networks:
+  mongo_network:
   proxy:
     external:
       name: nginx-proxy
