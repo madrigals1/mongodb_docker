@@ -25,3 +25,14 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${ROOT_USERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${ROOT_PASSWORD}
+      VIRTUAL_HOST: ${MONGO_EXPRESS_DOMAIN}
+      VIRTUAL_PORT: ${MONGO_EXPRESS_PORT}
+      LETSENCRYPT_HOST: ${MONGO_EXPRESS_DOMAIN}
+      LETSENCRYPT_EMAIL: ${MONGO_EXPRESS_LETSENCRYPT_EMAIL}
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external:
+      name: nginx-proxy
