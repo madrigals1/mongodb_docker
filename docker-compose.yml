@@ -43,7 +43,6 @@ services:
       VIRTUAL_HOST: ${MONGO_EXPRESS_SSL_DOMAIN}
       VIRTUAL_PORT: ${ME_PORT}
       LETSENCRYPT_HOST: ${MONGO_EXPRESS_SSL_DOMAIN}
-      LETSENCRYPT_EMAIL: ${MONGO_EXPRESS_LETSENCRYPT_EMAIL}
     depends_on:
       - mongo
     networks:
