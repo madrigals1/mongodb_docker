@@ -47,10 +47,10 @@ services:
       - mongo
     networks:
       - mongo_network
-      - proxy
+      - https
 
 networks:
   mongo_network:
-  proxy:
+  https:
     external:
-      name: ${NGINX_PROXY_NETWORK}
+      name: ${HTTPS_NETWORK}
