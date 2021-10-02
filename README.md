@@ -79,6 +79,14 @@ Start
 docker-compose up
 ```
 
+**MongoDB** will be available on:
+- `mongodb://localhost:27017` for non-Docker environments.
+- `mongodb://mongo:27017` inside Docker containers with correct networking set up.
+
+**Mongo Express** will be available on:
+- `http://localhost:8081` for local.
+- `https://${MONGO_EXPRESS_SSL_DOMAIN}` over the internet.
+
 Stop
 ```
 docker-compose down
