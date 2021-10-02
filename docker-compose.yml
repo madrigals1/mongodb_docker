@@ -14,7 +14,7 @@ services:
     volumes:
       - "./data:/data/db"
     networks:
-      - mongo_network
+      - database_network
 
   mongo-express:
     image: mongo-express
@@ -46,11 +46,13 @@ services:
     depends_on:
       - mongo
     networks:
-      - mongo_network
+      - database_network
       - https
 
 networks:
-  mongo_network:
+  database_network:
+    external:
+      name: ${DATABASE_NETWORK}
   https:
     external:
       name: ${HTTPS_NETWORK}
