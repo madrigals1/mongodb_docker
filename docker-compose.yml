@@ -10,7 +10,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    command: ["mongod", "--auth"]
+    command: [ "mongod", "--auth" ]
     volumes:
       - "./data:/data/db"
     networks:
@@ -38,11 +38,6 @@ services:
       ME_CONFIG_MONGODB_AUTH_DATABASE: admin
       ME_CONFIG_MONGODB_AUTH_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       ME_CONFIG_MONGODB_AUTH_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      
-      # Let's encrypt settings
-      VIRTUAL_HOST: ${MONGO_EXPRESS_SSL_DOMAIN}
-      VIRTUAL_PORT: ${ME_PORT}
-      LETSENCRYPT_HOST: ${MONGO_EXPRESS_SSL_DOMAIN}
     depends_on:
       - mongo
     networks:

@@ -7,7 +7,7 @@ This project is used to have **MongoDB** available on server and
 
 Make sure you have installed these:
 - [Docker and Docker Compose](https://phoenixnap.com/kb/install-docker-compose-on-ubuntu-20-04) - Will install all the required packages and software.
-- (Optional) [Dockerized Nginx with SSL](https://github.com/madrigals1/nginx) - Will generate SSL certificates and make the app accessible through `SSL_DOMAIN`, that is set inside `.env`.
+- (Optional) [Dockerized Nginx](https://github.com/madrigals1/nginx_proxy_manager) - Will generate SSL certificates and make the app accessible through `HTTPS_NETWORK`, that is set inside `.env`.
 
 ## Installation
 
@@ -24,10 +24,9 @@ Environment variables:
 - `MONGO_INITDB_ROOT_USERNAME` - default username for MongoDB.
 - `MONGO_INITDB_ROOT_PASSWORD` - default password for MongoDB.
 - `ME_PORT` - port for Mongo Express.
-- `ME_CONFIG_BASICAUTH_USERNAME` - default username for Mongo Exporess.
-- `ME_CONFIG_BASICAUTH_PASSWORD` - default password for Mongo Exporess.
+- `ME_CONFIG_BASICAUTH_USERNAME` - default username for Mongo Express.
+- `ME_CONFIG_BASICAUTH_PASSWORD` - default password for Mongo Express.
 - SSL settings (Not needed without **Dockerized Nginx**):
-    - `MONGO_EXPRESS_SSL_DOMAIN` - website domain for Mongo Express, available through internet.
     - `HTTPS_NETWORK` - network, in which our HTTPS server will be running.
     - `DATABASE_NETWORK` - network, on which our database will be accessible.
 
@@ -45,9 +44,6 @@ ME_CONFIG_BASICAUTH_PASSWORD=password
 # Docker settings
 HTTPS_NETWORK=https_network
 DATABASE_NETWORK=database_network
-
-# SSL Settings
-MONGO_EXPRESS_SSL_DOMAIN=mongo.example.com
 ```
 
 ---
@@ -80,12 +76,12 @@ docker-compose up
 ```
 
 **MongoDB** will be available on:
-- `mongodb://localhost:27017` for non-Docker environments.
-- `mongodb://mongo:27017` inside Docker containers with correct networking set up.
+- `mongodb://localhost:${MONGO_PORT}` for non-Docker environments.
+- `mongodb://mongo:${MONGO_PORT}` inside Docker containers with correct networking set up.
 
 **Mongo Express** will be available on:
-- `http://localhost:8081` for local.
-- `https://${MONGO_EXPRESS_SSL_DOMAIN}` over the internet.
+- `http://localhost:${ME_PORT}` for local.
+- You can create **SSL Certificate** and **Proxy Host** using [Dockerized Nginx](https://github.com/madrigals1/nginx_proxy_manager)
 
 Stop
 ```
